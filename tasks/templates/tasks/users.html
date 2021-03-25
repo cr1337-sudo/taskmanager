@@ -1,0 +1,3 @@
+{% for user in users %}
+<p><a href="{% url 'user_tasks' user.id %}">{{user}}</a></p>
+{% endfor %}
