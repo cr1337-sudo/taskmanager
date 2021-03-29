@@ -50,7 +50,7 @@ class RegisterPage(FormView):
         #Al editar el método get se edita el ciclo normal, entonces hay que volver
         #a hacer un return de todos los datos, por defecto se hace return super de
         #La clase padre y self. El método que estamos editando y los parámetros
-        return super(RegisterPage, self).get(*args, **kwargs)
+        return super(RegisterPage, self).get(request, *args, **kwargs)
 
 
 class TaskList(ListView):
