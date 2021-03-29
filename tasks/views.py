@@ -47,6 +47,10 @@ class RegisterPage(FormView):
         # Con este if hace el request para saber si el usuario está logeado o no
         if self.request.user.is_authenticated:
             return redirect("home")
+        #Al editar el método get se edita el ciclo normal, entonces hay que volver
+        #a hacer un return de todos los datos, por defecto se hace return super de
+        #La clase padre y self. El método que estamos editando y los parámetros
+        return super(RegisterPage, self).get(*args, **kwargs)
 
 
 class TaskList(ListView):
