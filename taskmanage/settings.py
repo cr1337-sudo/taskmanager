@@ -31,12 +31,14 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'tasks',
+    'apps.usuarios',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 ]
 
 MIDDLEWARE = [
@@ -120,3 +122,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_URL = "login"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+
+]
+
+LOGIN_URL = "usuario/login"
+
+# Indica el modelo que se va a usar para registrar usuario, primero va el nombre del a app y despues el nombre de modelo
+
+AUTH_USER_MODEL = "usuarios.Usuario"

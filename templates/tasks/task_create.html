@@ -1,0 +1,35 @@
+{% extends 'tasks/index.html' %}
+
+{% block body %}
+  
+<form action="" method="POST">
+    {% csrf_token %}
+
+
+
+    <div class="row form-group">
+        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Título</label></div>
+      <div>{{form.title}}</div>                      
+    </div>
+    <div class="row form-group">
+        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Description</label></div>
+      <div>{{form.description}}</div>                      
+    </div>
+    <div class="row form-group">
+        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Estado</label></div>
+      <div>{{form.complete}}</div>                      
+    </div>
+</div>
+
+{% if request.user.is_staff %}    
+
+<div class="row form-group">
+    <div class="col col-md-3"><label for="text-input" class=" form-control-label">Admin task</label></div>
+  <div>{{form.admin_task}}</div>                      
+</div>
+{% endif %}
+<button class="btn btn-primary" type="submit">Confirmar</button>
+
+
+</form>
+{% endblock body %}

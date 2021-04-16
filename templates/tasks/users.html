@@ -1,0 +1,22 @@
+{% for user in users %}
+
+    Total de tareas
+    <p>{{user.task_set.count}}</p>
+    
+    
+
+{% endfor %}
+
+{% for datos in data %}
+    {% for user in datos %}
+<p><a href="{% url 'user_tasks' user.usuario %}">{{user.usuario}}</a></p>
+      READY
+      {{user.ready}}
+      IN PROCESS
+      {{user.in_process}}
+      UNINITIATED
+      {{user.uninitiated}}
+      
+    {% endfor %}
+    --------------
+    {% endfor %}

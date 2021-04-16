@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 
@@ -13,12 +14,12 @@ class Task(models.Model):
         (IN_PROCESS, "IN PROCESS"),
         (READY, "READY")
     ]
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ManyToManyField(settings.AUTH_USER_MODEL, null=True, blank=True)
     title = models.CharField(max_length=100, null=False, blank=False)
     description = models.TextField(blank=True, null=True)
-    complete = models.CharField(max_length=100, choices = STATUS)
+    complete = models.CharField(max_length=100, choices=STATUS)
     date = models.DateTimeField(auto_now_add=True)
+    admin_task = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s %s" %(self.title, self.date.strftime("%Y-%m-%d %H:%M:%S")) 
+        return "%s %s" % (self.title, self.date.strftime("%Y-%m-%d %H:%M:%S"))
