@@ -122,8 +122,9 @@ class Users(ListView):
             in_process = usuario.task_set.filter(complete="IN PROCESS").count()
             uninitiated = usuario.task_set.filter(
                 complete="UNINITIATED").count()
+            last_tasks = usuario.task_set.all()[:3:-1]
             #Multidimesional array, la forma de manejarlos es con un diccionario!
-            datos.append([{"usuario":usuario.username, "ready":ready, "in_process":in_process,"uninitiated":uninitiated}])
+            datos.append([{"usuario":usuario.username, "ready":ready, "in_process":in_process,"uninitiated":uninitiated, "last_tasks":last_tasks}])
         return context
 
 
