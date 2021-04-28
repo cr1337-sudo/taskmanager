@@ -1,0 +1,12 @@
+
+{% for group in groups %}
+    {{group}}
+{% endfor %}
+    
+<form action="" method="post">
+    {% csrf_token %}
+    Ingrese el pin 
+    {{form.as_p}}
+    <input type="submit" value="Enviar">
+
+</form>

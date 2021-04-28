@@ -35,6 +35,17 @@
         <li><a href="{% url 'all' %}">Usuarios</a></li>
         {% endif %}
       </ul>
+      <div class="nav-item dropdown">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Groups
+        </a>
+      
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" href="{% url 'groups:create_group' %}">Crear Grupo</a>
+          <a class="dropdown-item" href="{% url 'groups:group_list' %}">Group List</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </div>
     </nav>
 
     <div class="content">
@@ -42,7 +53,7 @@
         <a href="{% url 'create_task' %}">Crear Tarea <i class="fas fa-plus-square"></i></a>
 
          <div class="content-main-task">
-            {% for task in tasks %}
+            {% for task in tasks reversed %}
             {% if task.complete == "READY" %}
             <span class="content-main-task-ready task-common">
                 {{task.title}}
@@ -86,8 +97,6 @@
 
 
                     <a href="{% url 'delete_task' task.pk %}">Delete</a><i class="far fa-trash-alt"></i>
-
-
                     </div>
             </span>
             

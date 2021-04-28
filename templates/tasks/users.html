@@ -28,28 +28,24 @@
                         <p><a href="{% url 'user_tasks' user.usuario %}">{{user.usuario}} <i class="fas fa-plus-square"></i></a></p>
                     </div>
                     <div class="user-card-body">
-
-                        <i class="fas fa-check-circle"></i>
-                        {{user.ready}}
-                        <i class="fas fa-clock"></i>
-                        {{user.in_process}}
-                        <i class="fas fa-times-circle"></i> 
-                        {{user.uninitiated}}
-                        
-                        
                         {% if user.last_tasks %}
                             
                         
                             {% for i in user.last_tasks reversed %}
                             {{i.title}}
-                            {{i.date}}
                             {% endfor %}
                         
                             {% else %}
                             <p>No tasks</p>
-                        {% endif %}
-                        
-                        
+                        {% endif %}            
+                    </div>
+
+                    <div class="user-card-footer">
+                        <i class="fas fa-check-circle">{{user.ready}}</i>
+                        <i class="fas fa-clock"></i>
+                        {{user.in_process}}
+                        <i class="fas fa-times-circle"></i> 
+                        {{user.uninitiated}}
                     </div>
                     </span>
                         {% endfor %}
@@ -57,7 +53,11 @@
             </div>
         </span>
         <span class="main-right-side">
-            Hola
+            <form action="" method="post">
+                {% csrf_token %}            
+                {{form.as_p}}
+                <input type="submit" value="Enviar">
+            </form>
         </span>
     </div>
 </body>

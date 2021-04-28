@@ -39,7 +39,7 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   padding: 8px;
-  background-color: #7FDBFF;
+  background-color: #7fdbff;
   -webkit-box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
           box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
@@ -54,15 +54,15 @@
   color: blue;
 }
 
-.user-card-body .fa-check-circle {
+.user-card-footer .fa-check-circle {
   color: green;
 }
 
-.user-card-body .fa-clock {
+.user-card-footer .fa-clock {
   color: yellow;
 }
 
-.user-card-body .fa-times-circle {
+.user-card-footer .fa-times-circle {
   color: red;
 }
 /*# sourceMappingURL=users.css.map */

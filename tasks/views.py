@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from .models import *
-from .forms import TaskForm
+from .forms import TaskForm, AdminTaskForm
 from apps.usuarios.models import Usuario
 
 # Create your views here.
@@ -103,18 +103,20 @@ class TaskDelete(DeleteView):
 # Lista de usuarios registrados
 
 
-class Users(ListView):
+class Users(View):
     model = Usuario
     template_name = "tasks/users.html"
+    form_class = AdminTaskForm
     context_object_name = "users"
 
     def get_queryset(self):
         return self.model.objects.all()
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = {}
         datos = []
         context["data"] = datos
+        context["form"] = self.form_class
 
         for user in self.get_queryset():
             usuario = Usuario.objects.get(username=user.username)
@@ -126,7 +128,15 @@ class Users(ListView):
             #Multidimesional array, la forma de manejarlos es con un diccionario!
             datos.append([{"usuario":usuario.username, "ready":ready, "in_process":in_process,"uninitiated":uninitiated, "last_tasks":last_tasks}])
         return context
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, self.get_context_data())
 
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("all")
 
 class UserTasks(View):
     model = Usuario
