@@ -68,7 +68,7 @@ class TaskList(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         # Context["tasks"] porque antes el context object fue customizado
         # Se hace un filtro y se muestran las tareas del usuario que esté logeado
-        context["tasks"] = context["tasks"].filter(user=self.request.user)
+        context["tasks"] = context["tasks"].filter(user=self.request.user, group_task = False)
         # Siempre hacer return context al ejecutar esta funcion
         return context
 

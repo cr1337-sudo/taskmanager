@@ -1,29 +1,93 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from apps.usuarios.models import Usuario
 from apps.groups.models import Group
+from tasks.models import Task
 from apps.groups.forms import GroupForm, GroupEntryform
-from django.views.generic import CreateView, ListView, View
+from tasks.forms import TaskForm
+from django.views.generic import CreateView, ListView, View, UpdateView, DeleteView
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+
+from django.shortcuts import get_object_or_404
+
+
+from django.views.generic.base import ContextMixin
+from django.utils.functional import cached_property
 
 
 # Create your views here.
 """
 GroupIndex:
-    Hay que agregarle las tareas dentro del grupo.
     Hay que filtrar por usuario para saber qué tarea está realizando casa usuario
-    Agregar el formulario de creación para que se creen tareas dentro del ámbito del grupo
     Optimizar las "tareas de administrador" para usarlas dentro de grupos (se debe mostrar en color azul en el feed del grupo del usuario
         al que se le haya asignado una tarea por parte de un admin)
 """
-class GroupIndex(ListView):
+
+
+class GroupIndex(View):
     model = Group
     template_name = "groups/group_index.html"
+    form_class = TaskForm
 
-    
+    def get_queryset(self):
+        tasks = Task.objects.filter(group_task=self.kwargs["pk"])
+        return tasks
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        context["form"] = self.form_class
+        context["tasks"] = self.get_queryset()
+        context["group"] = self.model.objects.get(pk=self.kwargs["pk"])
+        context["group_name"] = self.model.objects.get(
+            group_name=context["group"])
+        context["members"] = context["group"].group_members.all()
+        context["user_tasks"] = context["tasks"].filter(user = self.request.user.id)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.instance.group_task = self.model.objects.get(
+                pk=self.kwargs["pk"])
+            form.save()
+            form.instance.user.add(self.request.user)
+        return redirect("groups:group_index", pk=self.kwargs["pk"])
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, self.get_context_data())
+
+
+class GroupTaskEdit(UpdateView):
+    model = Task
+    form_class = TaskForm
+    template_name = "tasks/task_create.html"
+
+    def get_success_url(self):
+        tarea = self.model.objects.get(pk=self.kwargs["pk"])
+        grupo = tarea.group_task.PIN
+        return reverse_lazy("groups:group_index", kwargs={"pk": grupo})
+
 
 """
+    GroupTaskDelete:
+        def delete: Misma lógica para eliminar una tarea, no quedan guardadas en la DB, lo único nuevo es que al borrar la tarea 
+                    se redirige al usuario hacia el grupo raiz(al fin pude)
+"""
 
+
+class GroupTaskDelete(DeleteView):
+    model = Task
+    template_name = "tasks/task_confirm_delete.html"
+    #success_url = reverse_lazy("groups:group_list")
+
+    def get_success_url(self):
+        tarea = self.model.objects.get(pk=self.kwargs["pk"])
+        grupo = tarea.group_task.PIN
+        return reverse_lazy("groups:group_index", kwargs={"pk": grupo})
+
+
+"""
     GoupList:
 
         get_queryset: Va a mostrar la lista de grupos en los que te encuentres,
@@ -38,6 +102,8 @@ class GroupIndex(ListView):
         post: Edición del método post para ver si el código UUID enviado pertenece a algún grupo o no
 
 """
+
+
 class GroupList(View):
     model = Group
     template_name = "groups/group_list.html"
@@ -69,7 +135,6 @@ class GroupList(View):
         return redirect("groups:group_list")
 
 
-
 """
     CreateGroup:
 
@@ -78,6 +143,8 @@ class GroupList(View):
 
 
 """
+
+
 class CreateGroup(CreateView):
     model = Group
     form_class = GroupForm

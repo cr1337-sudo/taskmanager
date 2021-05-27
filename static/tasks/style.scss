@@ -8,32 +8,6 @@ li > a:hover {
   color: red;
 }
 
-.navbar {
-  color: whitesmoke;
-  background-color: rgb(56, 56, 56);
-  display: flex;
-  justify-content: space-around;
-  text-decoration: none;
-  box-sizing: border-box;
-  height: 7vh;
-
-  &-left-side {
-    list-style: none;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 100%;
-    flex: 30%;
-  }
-  &-right-side {
-    color: whitesmoke;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex: 70%;
-  }
-}
 
 
 /* CMAIN CONTENT */
@@ -41,14 +15,14 @@ li > a:hover {
 .content{
     background-color: #8EC5FC;
     background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%); 
-    height: 93vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     
     &-main{
-        min-height: 30vh;
-        min-width: 30vw;
+        min-height: 45vh;
+        min-width: 45vw;
         background-color: whitesmoke;
         border-radius: 5%;
         padding: 5px;

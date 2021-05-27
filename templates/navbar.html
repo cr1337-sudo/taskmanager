@@ -1,0 +1,18 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'navbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'reset.css' %}" />
+
+
+</head>
+    <nav id="nav-bar">
+      <a id="logo" href="#home">Welcome {{user.username}}</a>
+      <ul class="nav-bar-items">
+        <li><a class="nav-bar-link" href="{% url 'home' %}">Inicio</a></li>
+        <li><a class="nav-bar-link" href="{% url 'groups:group_list' %}">Grupos</a></li>
+        <li><a class="nav-bar-link" href="{% url 'groups:create_group' %}">Crear grupo</a></li>
+        <li>
+          <a class="nav-bar-link" href="{% url 'usuario:logout' %}">LOGOUT</a>
+        </li>
+      </ul>
+    </nav>

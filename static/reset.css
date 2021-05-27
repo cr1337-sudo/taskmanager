@@ -1,0 +1,10 @@
+* {
+  font-family: "Helvetic", monospace;
+  font-size: 62.5%;
+  text-decoration: none;
+  /* color: #ffe5e2; */
+  list-style: none;
+  color: #dbdbdb;
+  margin: 0;
+  padding: 0;
+}
