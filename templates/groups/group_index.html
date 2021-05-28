@@ -1,3 +1,4 @@
+{% load is_staff %}
   {{group_name}}
 <form action="" method="POST">
     {% csrf_token %}
@@ -18,39 +19,58 @@
     </div>
 </div>
 
-{% if request.user.is_staff %}    
 
-<div class="row form-group">
-    <div class="col col-md-3"><label for="text-input" class=" form-control-label">Admin task</label></div>
-  <div>{{form.admin_task}}</div>                      
-</div>
-{% endif %}
 <button class="btn btn-primary" type="submit">Confirmar</button>
 
 
 </form>
 
 
+
+
+
+TODAS LAS TAREAS DE LOS USUARIOS DEL GRUPO
 {% if tasks %}
-    {% for task in tasks%}
-        {{task}}
-        <a href="{% url 'groups:group_task_edit' task.pk %}">Edit</a>
-        <a href="{% url 'groups:group_task_delete' task.pk %}">Delete</a>
-        {% endfor %}
+<ul>
+  
+  {% for task in tasks%}
+  
+  <li>{{task}}
+
+  
+  {% if user.username == admin or user in staff %}
+  <a href="{% url 'groups:group_task_edit' task.pk %}">Edit</a>
+  <a href="{% url 'groups:group_task_delete' task.pk %}">Delete</a>
+    
+  {% endif %}
+    
+  </li>
+  {% endfor %}
+</ul>    
 {% endif %}
 
-{% for member in members %}
-  {{member}}
-{% endfor %}
+<ul>
+  
+  {% for member in members %}
+  <li>  {{member}} <a href="{% url 'groups:add_mod' 'c2535648-05d9-4fa7-b3af-b48eba6d5837' member.username %}"></a></li>
+  {% endfor %}
+</ul>
 
 
+
+TAREAS DEL USUARIO
 
 {% if user_tasks %}
+<ul>
   
-{% for taskd in user_tasks %}
-  {{taskd}}
-  
-{% endfor %}
+  {% for taskd in user_tasks %}
+  <li>
+    {{taskd}}
+    <a href="{% url 'groups:group_task_edit' taskd.pk %}">Edit</a>
+    <a href="{% url 'groups:group_task_delete' taskd.pk %}">Delete</a>
+    </li>
+    {% endfor %}
     
-{% endif %}
+    {% endif %}
+  </ul>
   

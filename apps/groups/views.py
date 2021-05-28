@@ -42,7 +42,11 @@ class GroupIndex(View):
         context["group_name"] = self.model.objects.get(
             group_name=context["group"])
         context["members"] = context["group"].group_members.all()
-        context["user_tasks"] = context["tasks"].filter(user = self.request.user.id)
+        context["staff"] = context["group"].group_moderators.all()
+        context["admin"] = context["group"].admin.username
+        context["user_tasks"] = context["tasks"].filter(
+            user=self.request.user.id)
+        print(context["group"].pk)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -104,6 +108,20 @@ class GroupTaskDelete(DeleteView):
 """
 
 
+class GroupAddMod(View):
+    model = Group
+    template_name = "groups/group_add_mod.html"
+
+    def post(self, request, *args, **kwargs):
+        group = self.model.group.objects.get(pk=self.kwargs["pk"])
+        user = group.group_members.get(username=self.kwargs["username"])
+        group.instance.group_moderators.add(user)
+        return redirect("groups:group_index", pk=self.kwargs["pk"])
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+
 class GroupList(View):
     model = Group
     template_name = "groups/group_list.html"
@@ -112,7 +130,7 @@ class GroupList(View):
     def get_queryset(self):
         user = Usuario.objects.get(id=self.request.user.id)
         grupos = Group.objects.filter(
-            Q(admin=user) | Q(group_members=user)
+            group_members=user
         )
         return grupos
 
