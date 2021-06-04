@@ -6,7 +6,8 @@ import uuid
 # Create your models here.
 
 class Group(models.Model):
-    PIN = models.UUIDField(default = uuid.uuid4, primary_key = True, editable = False)
+    id = models.BigAutoField(primary_key=True, editable = False)
+    PIN = models.UUIDField(default = uuid.uuid4, editable = False)
     admin = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null = True, blank = True, related_name="admin")
     group_moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, null = True, blank = True, related_name="group_moderators")
     group_members = models.ManyToManyField(settings.AUTH_USER_MODEL, null = True, blank = True, related_name="group_members")

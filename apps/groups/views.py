@@ -46,7 +46,7 @@ class GroupIndex(View):
         context["admin"] = context["group"].admin.username
         context["user_tasks"] = context["tasks"].filter(
             user=self.request.user.id)
-        print(context["group"].pk)
+        context["PIN"] = context["group"].PIN
         return context
 
     def post(self, request, *args, **kwargs):
@@ -112,15 +112,21 @@ class GroupAddMod(View):
     model = Group
     template_name = "groups/group_add_mod.html"
 
-    def post(self, request, *args, **kwargs):
-        group = self.model.group.objects.get(pk=self.kwargs["pk"])
-        user = group.group_members.get(username=self.kwargs["username"])
-        group.instance.group_moderators.add(user)
-        return redirect("groups:group_index", pk=self.kwargs["pk"])
+    def get_context_data(self, **kwargs):
+        context = {}
+        context["group"] = self.model.objects.get(pk=self.kwargs["pk"])
+        context["user"] = context["group"].group_members.get(
+            username=self.kwargs["username"])
+        return context
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        return render(request, self.template_name, self.get_context_data())
 
+    def post(self, request, *args, **kwargs):
+        group = self.model.objects.get(pk=self.kwargs["pk"])
+        user = group.group_members.get(username=self.kwargs["username"])
+        group.group_moderators.add(user)
+        return reverse_lazy("groups:group_index", kwargs={"pk": group})
 
 class GroupList(View):
     model = Group
@@ -174,5 +180,6 @@ class CreateGroup(CreateView):
         if form.is_valid():
             form.instance.admin = self.request.user
             form.save()
+            form.instance.group_members.add(self.request.user)
             return redirect("home")
         return super().post(request, *args, **kwargs)

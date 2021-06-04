@@ -27,7 +27,7 @@
 .nav-bar-link {
   font-size: 1.6rem;
   margin: 0 5px;
-  padding-inline-end: 0 0.3rem;
+  color: white;
 }
 .nav-bar-link:hover {
   transition: all 0.5s ease;
